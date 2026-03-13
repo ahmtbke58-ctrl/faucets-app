@@ -1,37 +1,28 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Faucet App</title>
+    <title>Faucet Portal</title>
     <script src="https://telegram.org"></script>
     <style>
-        /* Mobil Kaydırmayı ve Seçmeyi Engelleme */
+        :root { --tg-theme-bg: #0e1621; --tg-theme-button: #2481cc; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #0e1621; color: white; margin: 0; padding: 15px;
-            overflow-x: hidden; /* Yatay kaymayı engeller */
+            background: var(--tg-theme-bg); color: white; margin: 0; padding: 15px;
+            overflow-x: hidden;
         }
         
-        /* Üst Kısım: Logo ve İsim */
-        .header { display: flex; align-items: center; gap: 12px; padding: 10px 0 20px 0; }
+        .header { display: flex; align-items: center; gap: 12px; padding: 10px 0 20px 0; border-bottom: 1px solid #2b5278; }
         .logo { 
             width: 40px; height: 40px; border-radius: 50%; 
             background: linear-gradient(135deg, #2481cc, #40a7e3);
             display: flex; align-items: center; justify-content: center; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .user-info { font-size: 16px; font-weight: 600; }
 
-        /* Izgara Yapısı: Mobil için 2 sütun */
-        .grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 10px; 
-            margin-top: 10px; 
-        }
-        
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
         .faucet-card { 
             background: #17212b; padding: 25px 10px; border-radius: 16px; 
             border: 1px solid #2b5278; text-align: center; 
@@ -41,7 +32,6 @@
         .faucet-icon { font-size: 24px; margin-bottom: 8px; display: block; }
         .faucet-name { font-size: 14px; font-weight: bold; }
 
-        /* Mobil Modal (Açılır Pencere) */
         .overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.85); z-index: 99; backdrop-filter: blur(3px);
@@ -49,7 +39,7 @@
         .modal { 
             display: none; position: fixed; bottom: 0; left: 0; width: 100%;
             background: #1c2833; padding: 30px 20px; 
-            border-radius: 25px 25px 0 0; /* Alt kısımdan yukarı açılır mobil stili */
+            border-radius: 25px 25px 0 0;
             z-index: 100; text-align: center;
             animation: slideUp 0.3s ease-out;
         }
@@ -69,23 +59,24 @@
 
     <div class="header">
         <div class="logo">FP</div>
-        <div class="user-info">Selam, <span id="username">Oyuncu</span>!</div>
+        <div class="user-info">Hi, <span id="username">Player</span>!</div>
     </div>
 
     <div class="grid">
-        <div class="faucet-card" onclick="showModal('Faucet A', 'Her 10 saniyede bir tıkla, TON ödülünü topla!', 'https://t.me')">
+        <!-- Kendi Faucet Linklerinle Değiştir -->
+        <div class="faucet-card" onclick="showModal('Satoshi Faucet', 'Claim every 10 seconds and earn Dash,Litecoin,EthereumTON!', 'https://t.me/satoshifaucetbot?start=6060192998')">
             <span class="faucet-icon">💰</span>
             <span class="faucet-name">Faucet A</span>
         </div>
-        <div class="faucet-card" onclick="showModal('Faucet B', 'Yeni nesil hızlı kazanç botu.', 'https://t.me')">
+        <div class="faucet-card" onclick="showModal('Gamerlee Faucet ', 'High yield new generation bot.', 'https://t.me/gamerleebot?start=1043')">
             <span class="faucet-icon">💎</span>
             <span class="faucet-name">Faucet B</span>
         </div>
-        <div class="faucet-card" onclick="showModal('Faucet C', 'Referans davet ederek kazancını katla!', 'https://t.me')">
+        <div class="faucet-card" onclick="showModal('MiniAppCrypto', 'Invite friends to double your earnings!', 'https://t.me/Miniappcrypto_bot?start=961')">
             <span class="faucet-icon">🔥</span>
             <span class="faucet-name">Faucet C</span>
         </div>
-        <div class="faucet-card" onclick="showModal('Faucet D', 'Günlük bonusları kaçırma!', 'https://t.me')">
+        <div class="faucet-card" onclick="showModal('Space Adventure', 'Free win Ton daily bonuses!', 'https://t.me/spaceadv_game_bot/play?startapp=6060192998')">
             <span class="faucet-icon">🚀</span>
             <span class="faucet-name">Faucet D</span>
         </div>
@@ -95,16 +86,15 @@
     <div id="modal" class="modal">
         <h2 id="modal-title"></h2>
         <p id="modal-desc"></p>
-        <button id="modal-link" class="claim-btn">Botu Başlat</button>
-        <span class="close-btn" onclick="closeModal()">Vazgeç</span>
+        <button id="modal-link" class="claim-btn">Start Bot</button>
+        <span class="close-btn" onclick="closeModal()">Cancel</span>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand(); // Uygulamayı mobilde tam ekran yapar
+        tg.expand();
 
-        // Telegram Kullanıcı Adı
         const user = tg.initDataUnsafe?.user;
         if (user) {
             document.getElementById('username').innerText = user.first_name || user.username;
@@ -119,7 +109,7 @@
             };
             document.getElementById('modal').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
-            tg.HapticFeedback.impactOccurred('medium'); // Mobilde hafif bir titreşim verir
+            tg.HapticFeedback.impactOccurred('medium');
         }
 
         function closeModal() {
