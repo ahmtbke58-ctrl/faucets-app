@@ -13,45 +13,20 @@
             background: var(--tg-theme-bg); color: white; margin: 0; padding: 15px;
             overflow-x: hidden;
         }
-        
         .header { display: flex; align-items: center; gap: 12px; padding: 10px 0 20px 0; border-bottom: 1px solid #2b5278; }
-        .logo { 
-            width: 40px; height: 40px; border-radius: 50%; 
-            background: linear-gradient(135deg, #2481cc, #40a7e3);
-            display: flex; align-items: center; justify-content: center; font-weight: bold;
-        }
+        .logo { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #2481cc, #40a7e3); display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .user-info { font-size: 16px; font-weight: 600; }
-
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
-        .faucet-card { 
-            background: #17212b; padding: 25px 10px; border-radius: 16px; 
-            border: 1px solid #2b5278; text-align: center; 
-            transition: transform 0.1s ease;
-        }
+        .faucet-card { background: #17212b; padding: 25px 10px; border-radius: 16px; border: 1px solid #2b5278; text-align: center; transition: transform 0.1s ease; }
         .faucet-card:active { transform: scale(0.95); background: #1c2833; }
         .faucet-icon { font-size: 24px; margin-bottom: 8px; display: block; }
         .faucet-name { font-size: 14px; font-weight: bold; }
-
-        .overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); z-index: 99; backdrop-filter: blur(3px);
-        }
-        .modal { 
-            display: none; position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #1c2833; padding: 30px 20px; 
-            border-radius: 25px 25px 0 0;
-            z-index: 100; text-align: center;
-            animation: slideUp 0.3s ease-out;
-        }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99; backdrop-filter: blur(3px); }
+        .modal { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #1c2833; padding: 30px 20px; border-radius: 25px 25px 0 0; z-index: 100; text-align: center; animation: slideUp 0.3s ease-out; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        
         .modal h2 { margin: 0 0 10px 0; font-size: 20px; color: #40a7e3; }
         .modal p { color: #8e979e; font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
-        
-        .claim-btn { 
-            background: #2481cc; color: white; border: none; padding: 15px; 
-            border-radius: 12px; font-weight: bold; font-size: 16px; width: 100%; 
-        }
+        .claim-btn { background: #2481cc; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 16px; width: 100%; }
         .close-btn { color: #8e979e; margin-top: 15px; display: block; font-size: 14px; text-decoration: underline; }
     </style>
 </head>
@@ -63,22 +38,22 @@
     </div>
 
     <div class="grid">
-        <!-- Kendi Faucet Linklerinle Değiştir -->
-        <div class="faucet-card" onclick="showModal('Satoshi Faucet', 'Claim every 10 seconds and earn Dash,Litecoin,EthereumTON!', 'https://t.me/satoshifaucetbot?start=6060192998')">
+        <!-- Direkt Linkler (t.me üzerinden) -->
+        <div class="faucet-card" onclick="showModal('Satoshi Faucet', 'Earn Dash, LTC, ETH and TON every 10s!', 'https://t.me/satoshifaucetbot?start=6060192998')">
             <span class="faucet-icon">💰</span>
-            <span class="faucet-name">Faucet A</span>
+            <span class="faucet-name">Satoshi</span>
         </div>
-        <div class="faucet-card" onclick="showModal('Gamerlee Faucet ', 'High yield new generation bot.', 'https://t.me/gamerleebot?start=1043')">
+        <div class="faucet-card" onclick="showModal('Gamerlee', 'High yield new generation bot.', 'https://t.me/gamerleebot?start=1043')">
             <span class="faucet-icon">💎</span>
-            <span class="faucet-name">Faucet B</span>
+            <span class="faucet-name">Gamerlee</span>
         </div>
-        <div class="faucet-card" onclick="showModal('MiniAppCrypto', 'Invite friends to double your earnings!', 'https://t.me/Miniappcrypto_bot?start=961')">
+        <div class="faucet-card" onclick="showModal('MiniAppCrypto', 'Invite friends and double your earnings!', 'https://t.me/Miniappcrypto_bot?start=961')">
             <span class="faucet-icon">🔥</span>
-            <span class="faucet-name">Faucet C</span>
+            <span class="faucet-name">MiniApp</span>
         </div>
-        <div class="faucet-card" onclick="showModal('Space Adventure', 'Free win Ton daily bonuses!', 'https://t.me/spaceadv_game_bot/play?startapp=6060192998')">
+        <div class="faucet-card" onclick="showModal('Space Adventure', 'Claim free TON daily bonuses!', 'https://t.me/spaceadv_game_bot/play?startapp=6060192998')">
             <span class="faucet-icon">🚀</span>
-            <span class="faucet-name">Faucet D</span>
+            <span class="faucet-name">Space Adv</span>
         </div>
     </div>
 
@@ -86,7 +61,7 @@
     <div id="modal" class="modal">
         <h2 id="modal-title"></h2>
         <p id="modal-desc"></p>
-        <button id="modal-link" class="claim-btn">Start Bot</button>
+        <button id="modal-link" class="claim-btn">CLAIM NOW</button>
         <span class="close-btn" onclick="closeModal()">Cancel</span>
     </div>
 
@@ -103,10 +78,14 @@
         function showModal(title, desc, url) {
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-desc').innerText = desc;
-            document.getElementById('modal-link').onclick = () => {
-                tg.openTelegramLink(url);
+            
+            const btn = document.getElementById('modal-link');
+            btn.onclick = function() {
+                // openLink kullanımı bazı ara sayfaları daha kolay aşar
+                tg.openLink(url);
                 closeModal();
             };
+            
             document.getElementById('modal').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
             tg.HapticFeedback.impactOccurred('medium');
@@ -119,4 +98,3 @@
     </script>
 </body>
 </html>
-
