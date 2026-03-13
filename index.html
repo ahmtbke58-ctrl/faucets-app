@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Faucet App</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        /* Mobil Kaydırmayı ve Seçmeyi Engelleme */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #0e1621; color: white; margin: 0; padding: 15px;
+            overflow-x: hidden; /* Yatay kaymayı engeller */
+        }
+        
+        /* Üst Kısım: Logo ve İsim */
+        .header { display: flex; align-items: center; gap: 12px; padding: 10px 0 20px 0; }
+        .logo { 
+            width: 40px; height: 40px; border-radius: 50%; 
+            background: linear-gradient(135deg, #2481cc, #40a7e3);
+            display: flex; align-items: center; justify-content: center; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .user-info { font-size: 16px; font-weight: 600; }
+
+        /* Izgara Yapısı: Mobil için 2 sütun */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 10px; 
+            margin-top: 10px; 
+        }
+        
+        .faucet-card { 
+            background: #17212b; padding: 25px 10px; border-radius: 16px; 
+            border: 1px solid #2b5278; text-align: center; 
+            transition: transform 0.1s ease;
+        }
+        .faucet-card:active { transform: scale(0.95); background: #1c2833; }
+        .faucet-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+        .faucet-name { font-size: 14px; font-weight: bold; }
+
+        /* Mobil Modal (Açılır Pencere) */
+        .overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); z-index: 99; backdrop-filter: blur(3px);
+        }
+        .modal { 
+            display: none; position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #1c2833; padding: 30px 20px; 
+            border-radius: 25px 25px 0 0; /* Alt kısımdan yukarı açılır mobil stili */
+            z-index: 100; text-align: center;
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .modal h2 { margin: 0 0 10px 0; font-size: 20px; color: #40a7e3; }
+        .modal p { color: #8e979e; font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
+        
+        .claim-btn { 
+            background: #2481cc; color: white; border: none; padding: 15px; 
+            border-radius: 12px; font-weight: bold; font-size: 16px; width: 100%; 
+        }
+        .close-btn { color: #8e979e; margin-top: 15px; display: block; font-size: 14px; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">FP</div>
+        <div class="user-info">Selam, <span id="username">Oyuncu</span>!</div>
+    </div>
+
+    <div class="grid">
+        <div class="faucet-card" onclick="showModal('Faucet A', 'Her 10 saniyede bir tıkla, TON ödülünü topla!', 'https://t.me')">
+            <span class="faucet-icon">💰</span>
+            <span class="faucet-name">Faucet A</span>
+        </div>
+        <div class="faucet-card" onclick="showModal('Faucet B', 'Yeni nesil hızlı kazanç botu.', 'https://t.me')">
+            <span class="faucet-icon">💎</span>
+            <span class="faucet-name">Faucet B</span>
+        </div>
+        <div class="faucet-card" onclick="showModal('Faucet C', 'Referans davet ederek kazancını katla!', 'https://t.me')">
+            <span class="faucet-icon">🔥</span>
+            <span class="faucet-name">Faucet C</span>
+        </div>
+        <div class="faucet-card" onclick="showModal('Faucet D', 'Günlük bonusları kaçırma!', 'https://t.me')">
+            <span class="faucet-icon">🚀</span>
+            <span class="faucet-name">Faucet D</span>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay" onclick="closeModal()"></div>
+    <div id="modal" class="modal">
+        <h2 id="modal-title"></h2>
+        <p id="modal-desc"></p>
+        <button id="modal-link" class="claim-btn">Botu Başlat</button>
+        <span class="close-btn" onclick="closeModal()">Vazgeç</span>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand(); // Uygulamayı mobilde tam ekran yapar
+
+        // Telegram Kullanıcı Adı
+        const user = tg.initDataUnsafe?.user;
+        if (user) {
+            document.getElementById('username').innerText = user.first_name || user.username;
+        }
+
+        function showModal(title, desc, url) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-link').onclick = () => {
+                tg.openTelegramLink(url);
+                closeModal();
+            };
+            document.getElementById('modal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+            tg.HapticFeedback.impactOccurred('medium'); // Mobilde hafif bir titreşim verir
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
